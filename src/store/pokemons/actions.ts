@@ -60,7 +60,7 @@ export const deletePokemon = createAsyncThunk(
 
 export const randomPokemon = createAsyncThunk(
   "pokemon/randomPokemon",
-  async (currentPokemonId?: number | null) => {
+  async (currentPokemonId: number | null) => {
     const response = await fetch(
       `/api/pokemons/random?exclude_id=${currentPokemonId}`,
     );

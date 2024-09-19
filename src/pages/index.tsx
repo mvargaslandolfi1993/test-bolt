@@ -10,12 +10,12 @@ export default function Home() {
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(randomPokemon());
+      dispatch(randomPokemon(null));
     }
   }, [dispatch, status]);
 
   const handleSearchClick = () => {
-    dispatch(randomPokemon(pokemon?.id));
+    dispatch(randomPokemon(pokemon?.id ?? null));
   };
 
   if (status === "loading") return <div>Loading...</div>;
