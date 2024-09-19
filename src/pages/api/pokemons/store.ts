@@ -28,7 +28,7 @@ const createPokemon = async (req: NextApiRequest, res: NextApiResponse) => {
       if (err) {
         return res
           .status(500)
-          .json({ message: "Error processing file upload" });
+          .json({ message: "Error processing file upload", error: err });
       }
 
       const payload = {
@@ -63,11 +63,11 @@ const createPokemon = async (req: NextApiRequest, res: NextApiResponse) => {
       const dto = await CreatePokemonDto.create({
         ...payload,
         photo_url:
-          pokemonPhoto && pokemonPhoto[0] ? pokemonPhoto[0].newFilename : null,
+          pokemonPhoto && pokemonPhoto[0] ? pokemonPhoto[0].newFilename : 'default.png',
         evolution_photo_url:
           evolutionPhoto && evolutionPhoto[0]
             ? evolutionPhoto[0].newFilename
-            : null,
+            : 'default.png'
       });
 
       const pokemon = await CreatePokemon.handle(dto);

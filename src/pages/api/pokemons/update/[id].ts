@@ -29,7 +29,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (err) {
         return res
           .status(500)
-          .json({ message: "Error processing file upload" });
+          .json({ message: "Error processing file upload", error: err });
       }
 
       const id = Number(req.query.id);
