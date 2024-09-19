@@ -17,6 +17,8 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  transpilePackages: ["lucide-react"],
 };
 
 export default config;

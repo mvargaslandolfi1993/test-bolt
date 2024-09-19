@@ -17,6 +17,7 @@ Para instalar el gestor de paquetes a utilizar en este proyecto:
 ```
 https://pnpm.io/installation
 ```
+
 Para instalar las dependencias del proyecto, ejecuta:
 
 ```

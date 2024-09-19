@@ -1,3 +1,109 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-image: url("/bg-pokemon.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.pokedex img {
+  max-width: 650px;
+}
+
+.translate-80-percent {
+  --tw-translate-x: 72%;
+}
+
+.left-28-4-percent {
+  left: 29.2%;
+}
+
+.bottom-15 {
+  bottom: 4.15rem;
+}
+
+.bottom-4-1 {
+  bottom: 4.1rem;
+}
+
+.left-42-percent {
+  left: 42%;
+}
+
+.text-9 {
+  font-size: 8pt;
+}
+
+.pokedex-screen {
+  max-width: 200px;
+}
+
+.left-25-percent {
+  left: 26.5%;
+}
+
+.top-46-percent {
+  top: 46%;
+}
+
+.top-55-percent {
+  top: 55%;
+}
+
+.left-77-5-percent {
+  left: 74.5%;
+}
+
+.input-bg {
+  background-color: #272727;
+}
+
+.img-pokedex {
+  max-width: 180px !important;
+}
+@media screen and (max-width: 768px) {
+  .left-77-5-percent {
+    left: 72.5%;
+  }
+
+  .img-pokedex {
+    max-width: 85px !important;
+  }
+
+  .bottom-15 {
+    bottom: 2.8rem;
+  }
+
+  .left-1\/2 {
+    left: 43.5%;
+  }
+
+  .view-more {
+    font-size: 6pt;
+  }
+
+  .hide-mobile {
+    display: none;
+  }
+
+  .left-28-4-percent {
+    left: 33.7%;
+  }
+
+  .bottom-4-1 {
+    bottom: 2.7rem;
+  }
+  .text-9-mobile {
+    font-size: 9pt;
+  }
+
+  .left-25-percent {
+    left: 28.5%;
+  }
+
+  .sm-p-10 {
+    padding: 2rem;
+  }
+}
