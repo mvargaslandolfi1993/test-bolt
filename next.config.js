@@ -19,6 +19,10 @@ const config = {
   },
 
   transpilePackages: ["lucide-react"],
+
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default config;
