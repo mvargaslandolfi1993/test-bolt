@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
+import fs from "fs/promises";
+import { put } from "@vercel/blob";
 import path from "path";
 import CreatePokemonDto from "~/lib/dtos/create_pokemon_dto";
-import CreatePokemon from "~/lib/actions/pokemons/create_pokemon";
 import UpdatePokemon from "~/lib/actions/pokemons/update_pokemon";
 
 export const config = {
@@ -10,8 +11,6 @@ export const config = {
     bodyParser: false,
   },
 };
-
-const uploadDir = path.join(process.cwd(), "/public/uploads");
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -21,7 +20,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const form = formidable({
       multiples: false,
-      uploadDir: uploadDir,
       keepExtensions: true,
     });
 
@@ -66,19 +64,36 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           : fields.evolution_photo_url,
       };
 
-      const pokemonPhoto = files.pokemonPhoto;
-      const evolutionPhoto = files.evolutionPhoto;
+      const uploadToBlob = async (
+        file: formidable.File | formidable.File[],
+      ) => {
+        if (!file) return null;
+        const uploadedFile = Array.isArray(file) ? file[0] : file;
+
+        if (!uploadedFile) {
+          throw new Error("Uploaded file is undefined");
+        }
+
+        const fileData = await fs.readFile(uploadedFile.filepath);
+
+        const blob = await put(uploadedFile.newFilename, fileData, {
+          access: "public",
+        });
+
+        return blob.url;
+      };
+
+      const pokemonPhotoUrl = files.pokemonPhoto
+        ? await uploadToBlob(files.pokemonPhoto)
+        : payload.photo_url;
+      const evolutionPhotoUrl = files.evolutionPhoto
+        ? await uploadToBlob(files.evolutionPhoto)
+        : payload.evolution_photo_url;
 
       const dto = await CreatePokemonDto.create({
         ...payload,
-        photo_url:
-          pokemonPhoto && pokemonPhoto[0]
-            ? pokemonPhoto[0].newFilename
-            : payload.photo_url,
-        evolution_photo_url:
-          evolutionPhoto && evolutionPhoto[0]
-            ? evolutionPhoto[0].newFilename
-            : payload.evolution_photo_url,
+        photo_url: pokemonPhotoUrl,
+        evolution_photo_url: evolutionPhotoUrl,
       });
 
       const pokemon = await UpdatePokemon.handle(id, dto);
@@ -86,7 +101,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json(pokemon);
     });
   } catch (error) {
-    return res.status(500).json({ message: "Error updating pokemon" });
+    return res.status(500).json({ message: "Error updating pokemon", error });
   }
 };
 
