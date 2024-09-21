@@ -7,7 +7,7 @@ const PokemonCard = (pokemon: IPokemon) => {
     <Link href={`/pokedex/${pokemon.id}`}>
       <div className="rounded-md border border-transparent bg-[#272727] p-4 text-center opacity-100">
         <img
-          src={`/uploads/${pokemon.photo_url}`}
+          src={pokemon.photo_url}
           alt={pokemon.name}
           className="mx-auto mb-2 h-48 w-48 object-cover"
         />

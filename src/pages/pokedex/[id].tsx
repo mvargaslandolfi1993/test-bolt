@@ -83,7 +83,7 @@ export default function PokemonDetails() {
                 {/* Columna izquierda - Imagen del Pokémon */}
                 <div>
                   <img
-                    src={`/uploads/${pokemon.photo_url}`}
+                    src={pokemon.photo_url}
                     alt={pokemon.name}
                     className="h-auto w-full rounded-md"
                   />
@@ -148,7 +148,7 @@ export default function PokemonDetails() {
                     <div className="mt-4 flex items-center space-x-4">
                       {/* Imagen antes de la evolución */}
                       <img
-                        src={`/uploads/${pokemon.photo_url}`}
+                        src={pokemon.photo_url}
                         alt="Before Evolution"
                         className="h-auto w-32 rounded-md"
                       />
@@ -157,7 +157,7 @@ export default function PokemonDetails() {
 
                       {/* Imagen después de la evolución */}
                       <img
-                        src={`/uploads/${pokemon.evolution_photo_url}`}
+                        src={pokemon.evolution_photo_url}
                         alt="After Evolution"
                         className="h-auto w-32 rounded-md"
                       />

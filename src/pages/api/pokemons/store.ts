@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
-import path from "path";
+import fs from "fs/promises";
+import { put } from "@vercel/blob";
 import CreatePokemonDto from "~/lib/dtos/create_pokemon_dto";
 import CreatePokemon from "~/lib/actions/pokemons/create_pokemon";
 
@@ -10,8 +11,6 @@ export const config = {
   },
 };
 
-const uploadDir = path.join(process.cwd(), "/public/uploads");
-
 const createPokemon = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
@@ -20,7 +19,6 @@ const createPokemon = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const form = formidable({
       multiples: false,
-      uploadDir: uploadDir,
       keepExtensions: true,
     });
 
@@ -57,17 +55,36 @@ const createPokemon = async (req: NextApiRequest, res: NextApiResponse) => {
           : fields.evolution_description,
       };
 
-      const pokemonPhoto = files.pokemonPhoto;
-      const evolutionPhoto = files.evolutionPhoto;
+      const uploadToBlob = async (
+        file: formidable.File | formidable.File[],
+      ) => {
+        if (!file) return null;
+        const uploadedFile = Array.isArray(file) ? file[0] : file;
+
+        if (!uploadedFile) {
+          throw new Error("Uploaded file is undefined");
+        }
+
+        const fileData = await fs.readFile(uploadedFile.filepath);
+
+        const blob = await put(uploadedFile.newFilename, fileData, {
+          access: "public",
+        });
+
+        return blob.url;
+      };
+
+      const pokemonPhotoUrl = files.pokemonPhoto
+        ? await uploadToBlob(files.pokemonPhoto)
+        : null;
+      const evolutionPhotoUrl = files.evolutionPhoto
+        ? await uploadToBlob(files.evolutionPhoto)
+        : null;
 
       const dto = await CreatePokemonDto.create({
         ...payload,
-        photo_url:
-          pokemonPhoto && pokemonPhoto[0] ? pokemonPhoto[0].newFilename : 'default.png',
-        evolution_photo_url:
-          evolutionPhoto && evolutionPhoto[0]
-            ? evolutionPhoto[0].newFilename
-            : 'default.png'
+        photo_url: pokemonPhotoUrl || "default.png",
+        evolution_photo_url: evolutionPhotoUrl || "default.png",
       });
 
       const pokemon = await CreatePokemon.handle(dto);
@@ -75,7 +92,7 @@ const createPokemon = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json(pokemon);
     });
   } catch (error) {
-    return res.status(500).json({ message: "Error creating pokemon" });
+    return res.status(500).json({ message: "Error creating pokemon", error });
   }
 };
 

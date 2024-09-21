@@ -149,7 +149,7 @@ export default function UpdatePokedex() {
               {pokemon && pokemon.photo_url && (
                 <div className="ml-4 mt-4">
                   <img
-                    src={`/uploads/${pokemon.photo_url}`}
+                    src={pokemon.photo_url}
                     alt="Pokémon Preview"
                     className="h-auto w-24 rounded-md"
                   />
@@ -266,7 +266,7 @@ export default function UpdatePokedex() {
               {pokemon && pokemon.evolution_photo_url && (
                 <div className="ml-4 mt-4">
                   <img
-                    src={`/uploads/${pokemon.evolution_photo_url}`}
+                    src={pokemon.evolution_photo_url}
                     alt="Pokémon Preview"
                     className="h-auto w-24 rounded-md"
                   />

@@ -52,7 +52,7 @@ export default function Home() {
 
           <div>
             <img
-              src={`/uploads/${pokemon?.photo_url}`}
+              src={pokemon?.photo_url}
               alt={pokemon?.name}
               className="img-pokedex left-55-percent top-55-percent left-77-5-percent absolute -translate-x-1/2 -translate-y-1/2 transform"
             />
